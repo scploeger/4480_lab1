@@ -58,19 +58,6 @@ def plot():
 
 
 def main(config):
-    num_samples = int(input("How many samples do you want to take?: (Enter int only) \n"))
-
-    while(config == 0):
-        itr = 0
-        print("What accelerometer scale modifer do you want to use?")
-        val = input("Press: (2)_G, (4)_G, (8)_G, 1(6)_G\n")
-
-        if(val != '2' and val != '4' and val != '8' and val != '6'):
-            print("Only enter 2, 4, 8, or 1!")
-        else:
-            sensitivity = "AFS_" + val + "G"
-            print("Sens: " + sensitivity)
-            config = 1
 
     mpu = MPU9250(
     address_ak=AK8963_ADDRESS, 
@@ -82,10 +69,29 @@ def main(config):
     mfs=AK8963_BIT_16, 
     mode=AK8963_MODE_C100HZ)
 
-    setattr(mpu, 'afs', AFS_8G)
+    num_samples = int(input("How many samples do you want to take?: (Enter int only) \n"))
+
+    while(config == 0):
+        itr = 0
+        print("What accelerometer scale modifer do you want to use?")
+        val = input("Press: (2)_G, (4)_G, (8)_G, 1(6)_G\n")
+
+        if(val != '2' and val != '4' and val != '8' and val != '6'):
+            print("Only enter 2, 4, 8, or 1!")
+        else:
+            config = 1
+
+    if val == '2':
+        setattr(mpu, 'afs', AFS_2G)
+    elif val == '4':
+        setattr(mpu, 'afs', AFS_4G)
+        print("val is 4!!")
+    elif val == '8':
+        setattr(mpu, 'afs', AFS_8G)
+    elif val == '16':
+        setattr(mpu, 'afs', AFS_16G)
 
     mpu.configure()
-
     print(mpu.getAllSettings())
 
     try:
