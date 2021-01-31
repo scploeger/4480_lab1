@@ -9,15 +9,17 @@ import matplotlib
 matplotlib.use('Agg') #use non-interactive backend (needed for matplotlib to run on pi) #must be called before importing pyplot
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+import scipy.signal as signal
 sys.path.append("")
 import time
+import pandas as pd
 from mpu9250_jmdev.registers import *
 from mpu9250_jmdev.mpu_9250 import MPU9250
 
 
 config = 0 #for acceleromater scale setting input check
-trial_num = "1" #for naming output files and labling graphs
+trial_num = "2" #for naming output files and labling graphs
+my_dpi = 91 #monitor dpi for scaling images
 
 
 #empty arrays for imu data
@@ -50,6 +52,24 @@ def plot():
         plt.xlabel('# Samples')
         plt.title('Trial ' + trial_num + ' - Accelerometer Data')
         plt.savefig('Trial ' + trial_num + ' - Accelerometer Data.png')
+
+        # First, design the Butterworth filter
+        plt.figure(figsize=(16, 10), dpi=my_dpi)
+        
+        N  = 3    # Filter order
+        Wn = 0.1 # Cutoff frequency
+        B, A = signal.butter(N, Wn, output='ba')
+        smooth_data = signal.filtfilt(B,A, a_data[:,0])
+
+        #Window moving average filtering with Pandas
+        smooth_data_pandas = pd.Series(a_data[:,0]).rolling(window=7).mean()
+
+
+        plt.plot(a_data[:,0],'r-', label = "original data") #plot original data
+        plt.plot(smooth_data,'b-', label = "Butterworth Filter") #plot smoothed data butterworth
+        plt.plot(smooth_data_pandas,'g-', label = "moving average") #plot smoothed data butterworth
+        plt.legend(loc="upper left")
+        plt.savefig('Filtered.png')
 
         #plot G graph
         plt.figure()
@@ -115,7 +135,6 @@ def main(config):
 
             itr += 1
 
-            time.sleep(0.1)
         plot() #after collecting data, plot charts and export CSV files
     except KeyboardInterrupt: #if CTRL+C is pressed
         plot() #...still plot
