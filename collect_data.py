@@ -19,7 +19,7 @@ from mpu9250_jmdev.mpu_9250 import MPU9250 #IMU library
 
 
 config = 0 #for acceleromater scale setting input check
-trial_num = "2" #for naming output files and labling graphs
+trial_num = "1" #for naming output files and labling graphs
 my_dpi = 91 #monitor dpi for scaling images
 filtering = "n" #defult plotting filtered graphs NO
 
@@ -44,24 +44,24 @@ def plot(filtering):
         np.savetxt('Trial ' + trial_num + ' - Gyroscope Data.csv', g, delimiter=",")
 
         #plot Acceleromater graph
-        plt.figure()
+        plt.figure(figsize=(16, 10), dpi=my_dpi)
         plt.plot(a_data[:,0], label = "a_x") #plot the X, Y, Z data seperately
         plt.plot(a_data[:,1], label = "a_y")
         plt.plot(a_data[:,2], label = "a_z")
         plt.legend(loc="upper left")
-        plt.ylim(-2.1, 2.1)
+        plt.ylim(-4.1, 4.1)
         plt.ylabel('Acceleration [g]')
         plt.xlabel('# Samples')
         plt.title('Trial ' + trial_num + ' - Accelerometer Data')
         plt.savefig('Trial ' + trial_num + ' - Accelerometer Data.png')
 
         #plot G graph
-        plt.figure()
+        plt.figure(figsize=(16, 10), dpi=my_dpi)
         plt.plot(g_data[:,0], label = "g_x") #plot the X, Y, Z data seperately
         plt.plot(g_data[:,1], label = "g_y")
         plt.plot(g_data[:,2], label = "g_z")
         plt.legend(loc="upper left")
-        plt.ylim(-500, 500)
+        plt.ylim(-1200, 1200)
         plt.ylabel('Degrees per Seconds (dps)')
         plt.xlabel('# Samples')
         plt.title('Trial ' + trial_num + ' - Gyroscope Data')
@@ -92,8 +92,8 @@ def plot(filtering):
             plt.legend(loc="upper left")
             plt.ylabel('Acceleration [g]')
             plt.xlabel('# Samples')
-            plt.title('Accelerometer Data (X-Axis) Filter Comparison')
-            plt.savefig('Accelerometer Data (X-Axis) Filter Comparison.png')
+            plt.title('Accelerometer Data (X-Axis) Filter Comparison (Trial ' + trial_num + ')')
+            plt.savefig('Accelerometer Data (X-Axis) Filter Comparison (Trial ' + trial_num + ').png')
 
 
             #plot the filtered Gyro data (Gyroscope Y axis)
@@ -120,8 +120,8 @@ def plot(filtering):
             plt.legend(loc="upper left")
             plt.ylabel('Degrees per Seconds (dps)')
             plt.xlabel('# Samples')
-            plt.title('Gyroscope Data (Y-Axis) Filter Comparison')
-            plt.savefig('Gyroscope Data (Y-Axis) Filter Comparison.png')
+            plt.title('Gyroscope Data (Y-Axis) Filter Comparison (Trial ' + trial_num + ')')
+            plt.savefig('Gyroscope Data (Y-Axis) Filter Comparison (Trial ' + trial_num + ').png' )
 
 #main function
 def main(config):

@@ -1,0 +1,6 @@
+Trial	# Samples	Accel. Sens.	Filtered Data Plotted?
+1	400		2G		Yes
+2	400		4G		No
+3	400		8G		No
+4	400		16G		Yes
+
